@@ -1,12 +1,12 @@
 {
-  "name"          : "_f",
+  "name"          : "func",
   "description"   : "JavaScript's functional programming helper library.",
-  "homepage"      : "http://thlorenz.github.com/_f/",
+  "homepage"      : "http://thlorenz.github.com/func/",
   "keywords"      : ["util", "functional", "server", "client", "browser"],
   "author"        : "Thorsten Lorenz <thlorenz@gmx.de>",
   "contributors"  : [],
   "dependencies"  : [],
-  "repository"    : {"type": "git", "url": "git://github.com/thlorenz/_f.git"},
-  "main"          : "_f.js",
+  "repository"    : {"type": "git", "url": "git://github.com/thlorenz/func.git"},
+  "main"          : "func.js",
   "version"       : "0.1.0"
 }
