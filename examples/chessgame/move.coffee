@@ -3,10 +3,40 @@ _f = require '../../func'
 # max fields that a piece can move in any given direction
 sq = [1..8]
 
-left  = _f (x) -> x.x--; x
-right = _f (x) -> x.x++; x
-down  = _f (x) -> x.y--; x
-up    = _f (x) -> x.y++; x
+
+# Experiment with committing and not-committing funcs
+setProperty = (ctx, path, value) ->
+  propName = null
+  nest = ctx
+  # Deal with nested properties e.g. human.arm.finger.nail
+  pathDepth = path.length - 1
+  for index in [0..pathDepth - 1]
+    do ->
+      propName = path[index]
+      nest = nest[propName]
+  propName = path[pathDepth]
+  nest[propName] = value
+
+getPropertyPathArray = (path) ->
+  if path.length is null then path.split '.' else path
+
+class FunctionWrapper
+  constructor: (fn, propertyPath) ->
+    @fn  = fn
+    path = getPropertyPathArray propertyPath
+    @fnc = (ctx) => setProperty(ctx, path, @fn ctx)
+  fwd: (f) -> _f (params) => f.fn(@fn(params))
+_f = (fn, commit) -> new FunctionWrapper(fn, commit)
+ctx = { x: {y: 5 } }
+
+left  = _f ((ctx) -> ctx.x.y - 1), 'x.y'
+
+left  = _f ((x) -> x.x - 1), 'x'
+right = _f ((x) -> x.x + 1), 'x'
+down  = _f ((x) -> x.y - 1), 'y'
+up    = _f ((x) -> x.y + 1), 'y'
+
+# End experiment
 
 ne    = up.fwd right
 se    = down.fwd right
