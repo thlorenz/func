@@ -1,0 +1,12 @@
+{
+  "name"          : "func_examples",
+  "homepage"      : "http://thlorenz.github.com/func/examples",
+  "keywords"      : ["util", "functional", "server", "client", "browser"],
+  "author"        : "Thorsten Lorenz <thlorenz@gmx.de>",
+  "contributors"  : [],
+  "dependencies"  : { 
+    "coffee-script"  : ">=1.1"
+  },
+  "repository"    : {"type": "git", "url": "git://github.com/thlorenz/func.git"},
+  "version"       : "0.1.0"
+}
