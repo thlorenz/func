@@ -1,4 +1,4 @@
-# Experiments in writing functional JavaScript.
+# Experiments in writing functional JavaScript
 
 ## Installation
 

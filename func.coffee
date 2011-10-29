@@ -35,19 +35,33 @@ clone = (src, depth = 1, currentDepth = 0) ->
   return target
 
 class FunctionWrapper
+
+  # Creates a wrapped version of the passed function with utility methods added.
+  # To get to the wrapped funcion e.g. to execute it use wrapped.fn .
+  # All its methods that return new functions wrap them before returning them.
   constructor: (fn) -> @fn = fn
+
+  #  Composes the wrapped function with the passed one.
+  #  E.g. add2.fwd mult2 creates a function that adds 2 to an argument and
+  #       then multiplies it by 2.
   fwd: (f) -> _f => f.fn(@fn(arguments))
+
+  # Creates a function that is executed x times.
+  # The result of the previous execution is forwarded to the next execution.
   times: (count) =>
     f = null
     for i in [1..count]
       do => f = if not f then this else f.fwd this
     f
+
+  # Curries the wrapped function with the given arguments from left to right.
   curry: ->
     f = this
     curriedArgs = Array::slice.call(arguments)
     return _f ->
       f.fn.apply this, curriedArgs.concat( Array::slice.call(arguments) )
-  # Clone method (see above)
+
+  # Clones a given object (see definition)
   clone: clone
 
 _f = (fn) -> new FunctionWrapper fn
