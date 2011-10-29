@@ -1,4 +1,4 @@
-# Experiments in writing funcional JavaScript.
+# Experiments in writing functional JavaScript.
 
 ## Installation
 
@@ -22,5 +22,5 @@
   Only the simplest move functions form the basis and are composed in order to express all
   possible move in a very declarative manner. 
 
-  The idea is that the correctness of the 
-  implementation can be reasoned about, assuming the very simple basis functions are correct.
+  The idea is that the correctness of the implementation can be reasoned about, 
+  assuming the very simple basis functions are correct.
