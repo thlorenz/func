@@ -17,6 +17,7 @@ fillValue = (val, depth, currentDepth) ->
 ###
  *  Copies all properties from source into a target as deep as is configured via depth.
  *  Depth is 1 by default which results in a shallow copy.
+ *  It is not cycle proof and therefore needs to be used with care.
  *
  *  @param {Object} src
  *  @param {Number} depth
