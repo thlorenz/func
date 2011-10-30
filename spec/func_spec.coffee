@@ -1,5 +1,5 @@
 puts = require('util').puts
-_f = require '../func'
+_f = require '../lib/func'
 
 describe 'func', ->
   describe 'that returns 1', ->

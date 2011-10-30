@@ -2,7 +2,7 @@ require 'coffee-script'
 piece = require './piece'
 move = require './move'
 util = require 'util'
-_f = require '../../func'
+_f = require '../../lib/func'
 puts = util.puts
 inspect = util.inspect
 

@@ -1,5 +1,5 @@
 require 'coffee-script'
-_f = require '../../func'
+_f = require '../../lib/func'
 move = require './move'
 
 # ChessGame

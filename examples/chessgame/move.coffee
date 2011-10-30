@@ -1,5 +1,5 @@
 require 'coffee-script'
-_f = require '../../func'
+_f = require '../../lib/func'
 
 
 # max fields that a piece can move in any given direction

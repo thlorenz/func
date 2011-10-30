@@ -1,3 +1,3 @@
 (function() {
-  module.exports = require('./_f');
+  module.exports = require('./lib/func');
 }).call(this);
