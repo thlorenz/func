@@ -29,6 +29,8 @@ class FunctionWrapper
   # Creates a function that is executed x times.
   # The result of the previous execution is forwarded to the next execution.
   times: (count) =>
+    if count < 1 then throw "Count needs to be 1 or greater for _f.times to work!"
+    if count is 1 then return this
     f = null
     for i in [1..count]
       do => f = if not f then this else f.fwd this

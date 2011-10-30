@@ -52,11 +52,14 @@ describe 'func', ->
       add1And2 = add.curry 1, 2
       it 'returns 6 when invoked with 3', -> expect(add1And2.fn 3).toEqual 6
 
-describe 'whe i clone', ->
-  describe '{ x: 1 }', ->
-  beforeEach ->
+describe 'given { x: 1 }', ->
+  src = tgt = null
+  initCtx = ->
     src = { x: 1 }
     tgt = _f.clone src
+  beforeEach -> initCtx()
+  initCtx()
+  describe 'when i clone it', ->
     it 'x of the clone is 1', -> expect(tgt.x).toEqual 1
     describe 'and change src x to 2', ->
       src.x = 2

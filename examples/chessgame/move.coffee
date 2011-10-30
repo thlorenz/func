@@ -3,7 +3,7 @@ _f = require '../../lib/func'
 
 
 # max fields that a piece can move in any given direction
-sq = [1..8]
+sq = [1..7]
 
 left  = _f (x) -> x.x--; x
 right = _f (x) -> x.x++; x
