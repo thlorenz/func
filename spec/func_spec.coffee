@@ -9,7 +9,7 @@ describe 'func', ->
   describe 'that adds 1', ->
     add1 = _f (x) -> ++x
     it 'returns 2 when invoked with 1', -> expect(add1.fn 1).toEqual 2
-    it 'returns 5 when invoked 4 times with 1', expect(add1.times(4).fn 1).toEqual 5
+    it 'returns 5 when invoked 4 times with 1', -> expect(add1.times(4).fn 1).toEqual 5
 
     describe 'composed with a func that multiplies with 3', ->
       mult3 = _f (x) -> 3 * x
@@ -27,28 +27,28 @@ describe 'func', ->
 
   describe 'that adds two args', ->
     add = _f (x, y) -> x + y
-    it 'returns 3 when invoked with 1 and 2', expect(add.fn 1, 2).toEqual 3
+    it 'returns 3 when invoked with 1 and 2', -> expect(add.fn 1, 2).toEqual 3
 
     describe 'composed with a func that multiplies by 2', ->
       mult2 = _f (x) -> 2 * x
       addMult2 = add.fwd mult2
-      it 'returns 6 when invoked with 1 and 2', expect(addMult2.fn 1, 2).toEqual 6
+      it 'returns 6 when invoked with 1 and 2', -> expect(addMult2.fn 1, 2).toEqual 6
       describe 'curried with 2', ->
         add2Mult2 = addMult2.curry 2
-        it 'returns 8 when invoked with 2', expect(add2Mult2.fn 2).toEqual 8
+        it 'returns 8 when invoked with 2', -> expect(add2Mult2.fn 2).toEqual 8
 
     describe 'curried with 1', ->
       add1 = add.curry 1
-      it 'returns 3 when invoked with 2', expect(add1.fn 2).toEqual 3
+      it 'returns 3 when invoked with 2', -> expect(add1.fn 2).toEqual 3
 
   describe 'that adds three args', ->
     add = _f (x, y, z) -> x + y + z
-    it 'returns 6 when invoked with 1, 2 and 3', expect(add.fn 1, 2, 3).toEqual 6
+    it 'returns 6 when invoked with 1, 2 and 3', -> expect(add.fn 1, 2, 3).toEqual 6
 
     describe 'curried with 1', ->
       add1 = add.curry 1
-      it 'returns 6 when invoked with 2 and 3', expect(add1.fn 2, 3).toEqual 6
+      it 'returns 6 when invoked with 2 and 3', -> expect(add1.fn 2, 3).toEqual 6
     describe 'curried with 1 and 2', ->
       add1And2 = add.curry 1, 2
-      it 'returns 6 when invoked with 3', expect(add1And2.fn 3).toEqual 6
+      it 'returns 6 when invoked with 3', -> expect(add1And2.fn 3).toEqual 6
 
