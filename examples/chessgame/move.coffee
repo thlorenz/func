@@ -1,4 +1,6 @@
+require 'coffee-script'
 _f = require '../../func'
+
 
 # max fields that a piece can move in any given direction
 sq = [1..8]

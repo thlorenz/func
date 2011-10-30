@@ -14,26 +14,6 @@ fillValue = (val, depth, currentDepth) ->
   else
     undefined
 
-###
- *  Copies all properties from source into a target as deep as is configured via depth.
- *  Depth is 1 by default which results in a shallow copy.
- *  It is not cycle proof and therefore needs to be used with care.
- *
- *  @param {Object} src
- *  @param {Number} depth
- *  @return {Object}
- *  @api private
-###
-clone = (src, depth = 1, currentDepth = 0) ->
-  return src                      if src is null or src is `undefined` or isFunction(src)
-  return src.slice 0              if Array.isArray src
-  return new Date(src.getTime())  if src instanceof Date
-  return new RegExp(src) if src   is src instanceof RegExp
-  return src                      if typeof(src) isnt 'object'
-  target = {}
-  target[key] = fillValue(val, depth, currentDepth) for key, val of src
-  return target
-
 class FunctionWrapper
 
   # Creates a wrapped version of the passed function with utility methods added.
@@ -44,7 +24,7 @@ class FunctionWrapper
   #  Composes the wrapped function with the passed one.
   #  E.g. add2.fwd mult2 creates a function that adds 2 to an argument and
   #       then multiplies it by 2.
-  fwd: (f) -> _f => f.fn(@fn(arguments))
+  fwd: (f) -> _f => f.fn(@fn.apply(this, arguments))
 
   # Creates a function that is executed x times.
   # The result of the previous execution is forwarded to the next execution.
@@ -61,10 +41,27 @@ class FunctionWrapper
     return _f ->
       f.fn.apply this, curriedArgs.concat( Array::slice.call(arguments) )
 
-  # Clones a given object (see definition)
-  clone: clone
-
 _f = (fn) -> new FunctionWrapper fn
+
+###
+ *  Copies all properties from source into a target as deep as is configured via depth.
+ *  Depth is 1 by default which results in a shallow copy.
+ *  It is not cycle proof and therefore needs to be used with care.
+ *
+ *  @param {Object} src
+ *  @param {Number} depth
+ *  @return {Object}
+ *  @api private
+###
+_f.clone = clone = (src, depth = 1, currentDepth = 0) ->
+  return src                      if src is null or src is `undefined` or isFunction(src)
+  return src.slice 0              if Array.isArray src
+  return new Date(src.getTime())  if src instanceof Date
+  return new RegExp(src) if src   is src instanceof RegExp
+  return src                      if typeof(src) isnt 'object'
+  target = {}
+  target[key] = fillValue(val, depth, currentDepth) for key, val of src
+  return target
 
 root._f = _f
 module.exports = _f
