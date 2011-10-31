@@ -5,9 +5,6 @@ inspect = util.inspect
 
 root = this
 
-isFunction = (it) ->
-  Object.prototype.toString.call(it) is "[object Function]"
-
 fillValue = (val, depth, currentDepth) ->
   if currentDepth < depth
     clone(val, depth, currentDepth + 1)
@@ -44,6 +41,9 @@ class FunctionWrapper
       f.fn.apply this, curriedArgs.concat( Array::slice.call(arguments) )
 
 _f = (fn) -> new FunctionWrapper fn
+
+isFunction = _f.isFunction = (it) ->
+  Object.prototype.toString.call(it) is "[object Function]"
 
 ###
  *  Copies all properties from source into a target as deep as is configured via depth.

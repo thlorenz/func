@@ -40,9 +40,6 @@ bishopBoard = [
  # a|b|c|d|e|f|g|h"
  # 1|2|3|4|5|6|7|8
 ]
-
-isOnBoard = (x) -> x.x < 9 and x.x > 0 and x.y < 9 and x.y > 0
-
 extractPieces = (stringArray) ->
   rows = stringArray
     .filter((r) -> r[0] isnt '-') # Allow row delimiters -----
@@ -58,38 +55,12 @@ extractPieces = (stringArray) ->
       .forEach (x) -> pieces.push(piece.toPiece x.char, x.column, rowIndex)
   pieces
 
+isOnBoard = (p) -> p.x > 0 and p.x < 9 and p.y > 0 and p.y < 9
+
 class Board
   constructor: (@pieces) ->
   occupied: -> @pieces.map((x) -> x.getPosition())
   toString: -> @pieces
     .map((x) -> "#{x.getShortName()} #{x.getDisplayPosition()}" )
 
-testPieces = extractPieces bishopBoard
-board = new Board(testPieces)
-bishop = board.pieces[0]
-
-takeUntil = (xs, ctx, predicate) ->
-  return [] if xs.length is 0
-  currentCtx = _f.clone ctx
-  luckyOnes = []
-  noScrewUp = true
-  index = 0
-  while noScrewUp and index < xs.length
-    do ->
-      luckyOnes.push(xs[index])
-      puts (inspect xs[index])
-      noScrewUp = predicate(xs[index].fn(currentCtx))
-      index++
-  luckyOnes
-
-onBoardNE = move.allNE
-  .filter((x) -> isOnBoard(x.fn(bishop.getPosition())))
-
-legalNE = takeUntil(onBoardNE, bishop.getPosition(), (x) ->
-  board.occupied()
-    .filter (o) ->
-      puts "occup #{inspect o} pos #{inspect x}"
-      o.x == x.x and o.y == x.y
-    .length == 0
-)
-
+module.exports = { Board, extractPieces, isOnBoard }

@@ -15,34 +15,28 @@ se    = down.fwd right
 nw    = up.fwd left
 sw    = down.fwd left
 
-allLeft   = sq.map((x) -> left.times x)
-allRight  = sq.map((x) -> right.times x)
-allDown   = sq.map((x) -> down.times x)
-allUp     = sq.map((x) -> up.times x)
+allLeft   = sq.map (x) -> left.times x
+allRight  = sq.map (x) -> right.times x
+allDown   = sq.map (x) -> down.times x
+allUp     = sq.map (x) -> up.times x
 
-allNE     = sq.map((x) -> ne.times x)
-allSE     = sq.map((x) -> se.times x)
-allNW     = sq.map((x) -> nw.times x)
-allSW     = sq.map((x) -> sw.times x)
+allNE     = sq.map (x) -> ne.times x
+allSE     = sq.map (x) -> se.times x
+allNW     = sq.map (x) -> nw.times x
+allSW     = sq.map (x) -> sw.times x
 
 knightNE  = up.fwd    ne
 knightSE  = down.fwd  se
 knightNW  = up.fwd    nw
 knightSW  = down.fwd  sw
 
-knight = [ knightNE, knightSE, knightNW, knightSW ]
-
-bishop = [].concat allNE, allSE, allNW, allSW
-
-rook = [].concat allLeft, allRight, allDown, allUp
-
-queen = bishop.concat rook
-
-king = [ left, right, up, down, ne, se, nw, sw ]
-
+knight    = [ knightNE, knightSE, knightNW, knightSW ]
+bishop    = [ allNE, allSE, allNW, allSW ]
+rook      = [ allLeft, allRight, allDown, allUp ]
+king      = [ left, right, up, down, ne, se, nw, sw ]
 whitePawn = [ up, up.times(2), ne, nw ]
-
 blackPawn = [ down, down.times(2), se, sw ]
+queen     = bishop.concat rook
 
 module.exports = {
   left, right, down, up, ne, se, nw, sw,

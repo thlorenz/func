@@ -1,68 +1,48 @@
 require 'coffee-script'
 _f = require '../../lib/func'
+util = require 'util'
+puts = util.puts
+inspect = util.inspect
+dump = ((_f inspect).fwd _f(puts)).fn
 move = require './move'
+piece = require './piece'
+board = require './board'
+
 
 # ChessGame
 # In order to demonstrate how functions that only change one state can be used
 # to solve more complex scenarios this example demonstrates how to use this approach
 # in order to determine legal chess moves for chess pieces in different scenarios.
 
-isLegalPosition = (p) -> p.x > 0 and p.x < 9 and p.y > 0 and p.y < 9
+takeUntil = (xs, ctx, predicate) ->
+  return [] if xs.length is 0
+  getCtx = -> if _f.isFunction(ctx) then ctx() else _f.clone ctx
+  luckyOnes = []
+  noScrewUp = true
+  index = 0
+  while noScrewUp and index < xs.length
+    do ->
+      luckyOnes.push(xs[index])
+      noScrewUp = predicate xs[index].fn(getCtx())
+      index++
+  luckyOnes
 
-rook = new Rook 'B', 2
-king = new King 'B', 4
-board = { 22: rook, 24: king }
+first = (xs, predicate) ->
 
-rookMoves = (board, pos) ->
-  move.rook
-    .map((m) ->
-      console.log "Pos", pos
-      res = m.fn( pos )
-      #console.log "Res", res
-      return res
-    )
-    .filter((p) ->
-      isLegalPosition(p) and not board.hasOwnProperty "#{p.x}#{p.y}"
-    )
-ms = rookMoves board, rook.position()
-ms.length
 
-charCodeOffset  = 'A'.charCodeAt(0) - 1
-prettyPosition  = (p) -> [ String.fromCharCode(p.x + charCodeOffset), p.y ]
+kng = new piece.King('D', 8, 'black')
+rok = new piece.Rook('D', 5, 'black')
+bsp = new piece.Bishop('B', 3, 'white')
+pieces = [ bsp, rok ]
+pieces.forEach((x) -> puts x.toString())
 
-class ChessPiece
-  constructor: (x, y) ->
-    @x = x.charCodeAt(0) - charCodeOffset
-    @y = y
-  positionDisplay: -> prettyPosition({ @x, @y })
-  position: -> { @x, @y }
-  legalMoves: ->
-    @moves
-      .map((x) => x.fn({ @x, @y }))
-      .filter(isLegalPosition)
-      .map(prettyPosition)
+ne = bsp.moves[0]
+dump(ne.map (x) -> x.fn(bsp.getPosition()))
 
-class Knight extends ChessPiece
-  moves: move.knight
-class Bishop extends ChessPiece
-  moves: move.bishop
-class Rook extends ChessPiece
-  moves: move.rook
+nonCapturing = takeUntil ne, bsp.getPosition, (x) ->
+  board.isOnBoard(x) and pieces.filter((p) -> p isnt x).length is 0
 
-class Queen extends ChessPiece
-  moves: move.queen
-class King extends ChessPiece
-  moves: move.king
-  toString: 'King: ' + @position
+#capturing =
 
-class Pawn extends ChessPiece
-  constructor: (x, y, color) ->
-    super(x, y)
-    @moves = if color is 'white' then move.whitePawn else move.blackPawn
+nonCapturing[0].fn(bsp.getPosition())
 
-knight = new Knight('B', 4)
-bishop = new Bishop('D', 5)
-rook = new Rook('A', 1)
-queen = new Queen('D', 1)
-king = new King('E', 1)
-pawn = new Pawn('E', 2, 'white')

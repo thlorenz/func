@@ -27,15 +27,9 @@ class ChessPiece
     @y_coord = @y - 1
     @color = color
   getDisplayPosition: -> displayPosition({ @x, @y })
-  getPosition: -> { @x, @y }
-  getShortName: -> if @color is 'white' then @code else @code.toLowerCase()
-  legalMoves: ->
-    @moves
-      .map((x) => x.fn({ @x, @y }))
-      .filter(isLegalPosition)
-      .map(displayPosition)
-  toString: -> "#{@color} #{@name} #{@positionDisplay()}"
-
+  getPosition:        -> { @x, @y }
+  getShortName:       -> if @color is 'white' then @code else @code.toLowerCase()
+  toString:           -> "#{@color} #{@name} #{@getDisplayPosition()}"
 
 class Knight extends ChessPiece
   code: 'N'
