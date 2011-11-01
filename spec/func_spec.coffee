@@ -78,12 +78,14 @@ describe 'wrapped arrays', ->
     smaller4 = (x) -> x < 4
     it 'take while x < 4 returns [ 1, 2, 3]', ->
       expect(xs.takeWhile(smaller4).xs).toEqual [1, 2, 3 ]
-    it 'take while include x < 4 returns [ 1, 2, 3, 4]', ->
-      expect(xs.takeWhileInclude(smaller4).xs).toEqual [1, 2, 3, 4 ]
     it 'first x is 3 returns 3', ->
       expect(xs.first (x) -> x is 3).toEqual 3
     it 'first x is 7 returns undefined', ->
       expect(xs.first (x) -> x is 7).toEqual undefined
+    it 'any x is 3 returns true', ->
+      expect(xs.any (x) -> x is 3).toBeTruthy()
+    it 'any x is 7 returns false', ->
+      expect(xs.any (x) -> x is 7).toBeFalsy()
 
 describe 'utility methods', ->
   describe 'given { x: 1 }', ->

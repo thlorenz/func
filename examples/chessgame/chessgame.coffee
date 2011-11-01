@@ -23,10 +23,10 @@ bsp = new piece.Bishop('B', 3, 'white')
 pieces = [ bsp, rok ]
 pieces.forEach((x) -> puts x.toString())
 
-ne = bsp.moves[0]
+ne = _f bsp.moves[0]
 dump(ne.map (x) -> x.fn(bsp.getPosition()))
 
-nonCapturing = takeUntil ne,(x) ->
+nonCapturing = ne.takeUntil (x) ->
   board.isOnBoard(x.fn(bsp.getPosition())) and
   pieces.filter((p) -> p isnt x.fn(bsp.getPosition())).length is 0
 

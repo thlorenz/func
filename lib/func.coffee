@@ -48,19 +48,14 @@ class ArrayWrapper
 
   # Returns all array items matching the predicate
   takeWhile: (predicate) ->
-    whileInclude = @takeWhileInclude predicate
-    if whileInclude.isEmpty() then whileInclude else whileInclude.xs.pop(); whileInclude
-
-  # Returns all array items matching the predicate including the first violator
-  takeWhileInclude: (predicate) ->
     return _f [] if @isEmpty()
     luckyOnes = []
     noScrewUp = true
     index = 0
     while noScrewUp and index < @count()
       do =>
-        luckyOnes.push(@xs[index]) if noScrewUp
         noScrewUp = predicate @xs[index]
+        luckyOnes.push(@xs[index]) if noScrewUp
         index++
     _f luckyOnes
 
@@ -75,6 +70,8 @@ class ArrayWrapper
         if foundMatch then match = @xs[index]
         index++
     match
+
+  any: (predicate) -> @first(predicate) isnt undefined
 
 
 _f = (x) ->
