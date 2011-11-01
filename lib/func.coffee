@@ -40,7 +40,50 @@ class FunctionWrapper
     return _f ->
       f.fn.apply this, curriedArgs.concat( Array::slice.call(arguments) )
 
-_f = (fn) -> new FunctionWrapper fn
+class ArrayWrapper
+  constructor: (@xs) ->
+  count: -> @xs.length
+  isEmpty: -> @xs.length is 0
+  isNotEmpty: -> not @isEmpty()
+
+  # Returns all array items matching the predicate
+  takeWhile: (predicate) ->
+    whileInclude = @takeWhileInclude predicate
+    if whileInclude.isEmpty() then whileInclude else whileInclude.xs.pop(); whileInclude
+
+  # Returns all array items matching the predicate including the first violator
+  takeWhileInclude: (predicate) ->
+    return _f [] if @isEmpty()
+    luckyOnes = []
+    noScrewUp = true
+    index = 0
+    while noScrewUp and index < @count()
+      do =>
+        luckyOnes.push(@xs[index]) if noScrewUp
+        noScrewUp = predicate @xs[index]
+        index++
+    _f luckyOnes
+
+  # Returns first array item matching predicate or undefined if none match
+  first: (predicate) ->
+    match = undefined
+    foundMatch = false
+    index = 0
+    while index < @count() and (not foundMatch)
+      do =>
+        foundMatch = predicate @xs[index]
+        if foundMatch then match = @xs[index]
+        index++
+    match
+
+
+_f = (x) ->
+  if isFunction x
+    new FunctionWrapper x
+  else if Array.isArray x
+    new ArrayWrapper x
+  else
+    throw "only functions and Arrays can be wrapped, not #{typeof x}s"
 
 isFunction = _f.isFunction = (it) ->
   Object.prototype.toString.call(it) is "[object Function]"

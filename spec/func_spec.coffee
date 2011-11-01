@@ -2,6 +2,14 @@ puts = require('util').puts
 _f = require '../lib/func'
 
 describe 'func', ->
+  describe 'when invoked with a function', ->
+    w = _f -> "a function"
+    it 'returns wrapped function', -> expect(typeof w.fn).toEqual("function")
+  describe 'when invoked with an array', ->
+    w = _f []
+    it 'returns wrapped array', expect(Array.isArray w.xs).toBeTruthy()
+
+describe 'wrapped function', ->
   describe 'that returns 1', ->
     one = _f -> 1
     it 'returns 1 when i invoke fn', -> expect(one.fn()).toEqual 1
@@ -52,19 +60,45 @@ describe 'func', ->
       add1And2 = add.curry 1, 2
       it 'returns 6 when invoked with 3', -> expect(add1And2.fn 3).toEqual 6
 
-describe 'given { x: 1 }', ->
-  src = tgt = null
-  initCtx = ->
-    src = { x: 1 }
-    tgt = _f.clone src
-  beforeEach -> initCtx()
-  initCtx()
-  describe 'when i clone it', ->
-    it 'x of the clone is 1', -> expect(tgt.x).toEqual 1
-    describe 'and change src x to 2', ->
-      src.x = 2
+describe 'wrapped arrays', ->
+  describe '[]', ->
+    a = _f []
+    it 'count is 0', expect(a.count()).toEqual 0
+    it 'is empty', expect(a.isEmpty()).toBeTruthy()
+    it 'is not not empty', expect(a.isNotEmpty()).toBeFalsy()
+    it 'xs is underlying array', expect(a.xs).toEqual []
+  describe '[1]', ->
+    a = _f [1]
+    it 'count is 1', expect(a.count()).toEqual 1
+    it 'is not empty', expect(a.isEmpty()).toBeFalsy()
+    it 'is not empty', expect(a.isNotEmpty()).toBeTruthy()
+    it 'xs is underlying array', expect(a.xs).toEqual [1]
+  describe '[1, 2, 3, 4, 5, 3, 6]', ->
+    xs = _f [1, 2, 3, 4, 5, 3, 6]
+    smaller4 = (x) -> x < 4
+    it 'take while x < 4 returns [ 1, 2, 3]', ->
+      expect(xs.takeWhile(smaller4).xs).toEqual [1, 2, 3 ]
+    it 'take while include x < 4 returns [ 1, 2, 3, 4]', ->
+      expect(xs.takeWhileInclude(smaller4).xs).toEqual [1, 2, 3, 4 ]
+    it 'first x is 3 returns 3', ->
+      expect(xs.first (x) -> x is 3).toEqual 3
+    it 'first x is 7 returns undefined', ->
+      expect(xs.first (x) -> x is 7).toEqual undefined
+
+describe 'utility methods', ->
+  describe 'given { x: 1 }', ->
+    src = tgt = null
+    initCtx = ->
+      src = { x: 1 }
+      tgt = _f.clone src
+    beforeEach -> initCtx()
+    initCtx()
+    describe 'when i clone it', ->
       it 'x of the clone is 1', -> expect(tgt.x).toEqual 1
-    describe 'and change cloned x to 2', ->
-      tgt.x = 2
-      it 'x of src is 1', -> expect(src.x).toEqual 1
+      describe 'and change src x to 2', ->
+        src.x = 2
+        it 'x of the clone is 1', -> expect(tgt.x).toEqual 1
+      describe 'and change cloned x to 2', ->
+        tgt.x = 2
+        it 'x of src is 1', -> expect(src.x).toEqual 1
 
