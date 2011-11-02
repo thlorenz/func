@@ -46,6 +46,27 @@ class ArrayWrapper
   isEmpty: -> @xs.length is 0
   isNotEmpty: -> not @isEmpty()
 
+  # Forwards of native Array functions - call it on xs and return wrapped array for collection results
+  indexOf:    ->     Array::indexOf.apply @xs, arguments
+  lastIndexOf:->     Array::lastIndexOf.apply @xs, arguments
+  pop:        ->     Array::pop.apply @xs, arguments
+  push:       ->     Array::push.apply @xs, arguments
+  reverse:    ->     Array::reverse.apply @xs, arguments
+  shift:      ->     Array::shift.apply @xs, arguments
+  unshift:    ->     Array::unshift.apply @xs, arguments
+  sort:       ->     Array::sort.apply @xs, arguments
+
+  map:        -> _f  Array::map.apply @xs, arguments
+  filter:     -> _f  Array::filter.apply @xs, arguments
+  concat:     -> _f  Array::concat.apply @xs, arguments
+  forEach:    ->     Array::forEach.apply @xs, arguments
+  reduce:     ->     Array::reduce.apply @xs, arguments
+  reduceRight:->     Array::reduceRight.apply @xs, arguments
+  every:      ->     Array::every.apply @xs, arguments
+  some:       ->     Array::some.apply @xs, arguments
+  join:       ->     Array::join.apply @xs, arguments
+  slice:      ->     Array::slice.apply @xs, arguments
+
   # Returns all array items matching the predicate
   takeWhile: (predicate) ->
     return _f [] if @isEmpty()
@@ -70,10 +91,6 @@ class ArrayWrapper
         if foundMatch then match = @xs[index]
         index++
     match
-
-  # Returns true if any array item matches the predicate otherwise false
-  any: (predicate) -> @first(predicate) isnt undefined
-
 
 _f = (x) ->
   if isFunction x

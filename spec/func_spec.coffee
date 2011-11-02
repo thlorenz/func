@@ -82,10 +82,44 @@ describe 'wrapped arrays', ->
       expect(xs.first (x) -> x is 3).toEqual 3
     it 'first x is 7 returns undefined', ->
       expect(xs.first (x) -> x is 7).toEqual undefined
-    it 'any x is 3 returns true', ->
-      expect(xs.any (x) -> x is 3).toBeTruthy()
-    it 'any x is 7 returns false', ->
-      expect(xs.any (x) -> x is 7).toBeFalsy()
+    it 'some x is 3 returns true', ->
+      expect(xs.some (x) -> x is 3).toBeTruthy()
+    it 'some x is 7 returns false', ->
+      expect(xs.some (x) -> x is 7).toBeFalsy()
+
+  describe 'forwarded native array functions', ->
+    source = _f [1, 2, 3]
+    describe 'forEach', ->
+      xsResult = []
+      directResult = []
+      source.forEach( (x) -> directResult.push x + 1 )
+      source.xs.forEach ( (x) -> xsResult.push x + 1 )
+      it 'behaves the same as calling it directly on xs',
+        expect(directResult).toEqual xsResult
+    describe 'map', ->
+      mapper = (x) -> x * 2
+      xsResult = source.xs.map (mapper)
+      directResult = source.map (mapper)
+      it 'returns same wrapped result as direct call on xs', ->
+        expect(directResult.xs).toEqual xsResult
+    describe 'filter', ->
+      filter = (x) -> x < 2 or x is 3
+      xsResult = source.xs.filter (filter)
+      directResult = source.filter (filter)
+      it 'returns same wrapped result as direct call on xs', ->
+        expect(directResult.xs).toEqual xsResult
+    describe 'reduce', ->
+      reducer = (acc, x) -> acc + x
+      xsResult = source.xs.reduce reducer, 10
+      directResult = source.reduce reducer, 10
+      it 'returns same result as direct call on xs', ->
+        expect(directResult).toEqual xsResult
+    describe 'reduceRight', ->
+      reducer = (acc, x) -> acc + x
+      xsResult = source.xs.reduceRight reducer, 10
+      directResult = source.reduceRight reducer, 10
+      it 'returns same result as direct call on xs', ->
+        expect(directResult).toEqual xsResult
 
 describe 'utility methods', ->
   describe 'given { x: 1 }', ->
