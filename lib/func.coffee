@@ -71,6 +71,7 @@ class ArrayWrapper
         index++
     match
 
+  # Returns true if any array item matches the predicate otherwise false
   any: (predicate) -> @first(predicate) isnt undefined
 
 
